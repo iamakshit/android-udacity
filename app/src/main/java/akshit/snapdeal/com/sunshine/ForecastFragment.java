@@ -1,5 +1,6 @@
 package akshit.snapdeal.com.sunshine;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,8 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,7 +75,7 @@ public class ForecastFragment extends Fragment {
             int corePoolSize = 60;
             int maximumPoolSize = 80;
             int keepAliveTime = 10;
-            String pinCode="110052";
+            String pinCode = "110052";
             BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
             Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
             Log.i(TAG, "Refresh Action being called");
@@ -82,7 +85,6 @@ public class ForecastFragment extends Fragment {
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pinCode);
             else
                 task.execute(pinCode);
-
 
 
             Log.i(TAG, "Refresh Action executed");
@@ -96,23 +98,31 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-         weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weatherForecastList);
+        weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weatherForecastList);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        ListView listview = (ListView) rootView.findViewById(R.id.listview_forecast);
+        final ListView listview = (ListView) rootView.findViewById(R.id.listview_forecast);
         listview.setAdapter(weatherFroecastAdapter);
 
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Context context = getActivity().getApplicationContext();
+                String obj = (String) listview.getAdapter().getItem(position);
 
+                Toast.makeText(context, "Following info: "+obj, Toast.LENGTH_SHORT).show();
+
+            }
+        });
         return rootView;
 
     }
 
 
-
     /* The date/time conversion code is going to be moved outside the asynctask later,
      * so for convenience we're breaking it out into its own method now.
      */
-    private String getReadableDateString(long time){
+    private String getReadableDateString(long time) {
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
         SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
@@ -134,7 +144,7 @@ public class ForecastFragment extends Fragment {
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
-     *
+     * <p/>
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
@@ -169,7 +179,7 @@ public class ForecastFragment extends Fragment {
         // now we work exclusively in UTC
         dayTime = new Time();
         String[] resultStrs = new String[numDays];
-        for(int i = 0; i < weatherArray.length(); i++) {
+        for (int i = 0; i < weatherArray.length(); i++) {
             // For now, using the format "Day, description, hi/low"
             String day;
             String description;
@@ -183,7 +193,7 @@ public class ForecastFragment extends Fragment {
             // "this saturday".
             long dateTime;
             // Cheating to convert this to UTC time, which is what we want anyhow
-            dateTime = dayTime.setJulianDay(julianStartDay+i);
+            dateTime = dayTime.setJulianDay(julianStartDay + i);
             day = getReadableDateString(dateTime);
 
             // description is in a child array called "weather", which is 1 element long.
@@ -215,11 +225,10 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] data) {
-            Log.i(TAG,"Inside onPostExecute method");
+            Log.i(TAG, "Inside onPostExecute method");
 
             weatherFroecastAdapter.clear();
-            for(String str:data)
-            {
+            for (String str : data) {
                 weatherFroecastAdapter.add(str);
             }
             super.onPostExecute(data);
@@ -236,12 +245,11 @@ public class ForecastFragment extends Fragment {
             final String DAYS_PARAM = "cnt";
             final String APPID_PARAM = "APPID";
 
-            String format="json";
-            String units="metric";
-            int num=7;
-            String []data= new String[num];
-            if(params.length==0)
-            {
+            String format = "json";
+            String units = "metric";
+            int num = 7;
+            String[] data = new String[num];
+            if (params.length == 0) {
                 return null;
             }
             HttpURLConnection urlConnection = null;
@@ -259,9 +267,8 @@ public class ForecastFragment extends Fragment {
                         .appendQueryParameter(UNITS_PARAM, units).appendQueryParameter(DAYS_PARAM, Integer.toString(num)).appendQueryParameter(APPID_PARAM, OPEN_WEATHER_MAP_API_KEY).build();
 
 
-
-                Log.i(TAG,"Build URI =>"+buildUri.toString());
-                URL url=new URL(buildUri.toString());
+                Log.i(TAG, "Build URI =>" + buildUri.toString());
+                URL url = new URL(buildUri.toString());
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -294,9 +301,7 @@ public class ForecastFragment extends Fragment {
 
                 try {
                     data = getWeatherDataFromJson(forecastJsonStr, num);
-                }
-                catch(JSONException e)
-                {
+                } catch (JSONException e) {
                     return null;
                 }
 
