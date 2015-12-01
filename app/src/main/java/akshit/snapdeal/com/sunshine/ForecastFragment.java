@@ -1,6 +1,7 @@
 package akshit.snapdeal.com.sunshine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -108,9 +109,13 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Context context = getActivity().getApplicationContext();
-                String obj = (String) listview.getAdapter().getItem(position);
+                String text = (String) listview.getAdapter().getItem(position);
 
-                Toast.makeText(context, "Following info: "+obj, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Following info: "+text, Toast.LENGTH_SHORT).show();
+
+                Intent intent= new Intent(context, DetailActivity.class).putExtra(Intent.EXTRA_TEXT,text);
+                startActivity(intent);
+
 
             }
         });
