@@ -6,8 +6,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="akshit.snapdeal.com.sunshine.DetailActivity.PlaceholderFragment"
+    tools:context="akshit.snapdeal.com.sunshine.DetailActivity.DetailFragment"
     tools:showIn="@layout/activity_detail">
 
+    <TextView
+        android:text="@+id/detail_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
