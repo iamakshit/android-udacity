@@ -1,5 +1,6 @@
 package akshit.snapdeal.com.sunshine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
         public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+      //  getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -44,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id ==  R.id.action_settings)
+        {
+            Intent intent= new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
