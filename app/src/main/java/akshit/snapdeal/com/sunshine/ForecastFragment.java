@@ -2,10 +2,12 @@ package akshit.snapdeal.com.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -72,6 +74,8 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String pinCode= prefs.getString(getString(R.string.pref_location_key) ,getString(R.string.pref_location_default));
 
         if (id == R.id.action_refresh) {
             FetchWeatherTask task = new FetchWeatherTask();
@@ -79,7 +83,6 @@ public class ForecastFragment extends Fragment {
             int corePoolSize = 60;
             int maximumPoolSize = 80;
             int keepAliveTime = 10;
-            String pinCode = "110052";
             BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
             Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
             Log.i(TAG, "Refresh Action being called");
