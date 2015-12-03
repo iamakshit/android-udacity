@@ -34,7 +34,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -54,7 +53,12 @@ public class ForecastFragment extends Fragment {
     public ForecastFragment() {
     }
 
-    public static List<String> weatherForecastList = new ArrayList<String>();
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeatherTask();
+    }
 
 
     @Override
@@ -71,29 +75,30 @@ public class ForecastFragment extends Fragment {
         inflater.inflate(R.menu.menu_settings, menu);
     }
 
+    public void updateWeatherTask() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String pinCode = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+        FetchWeatherTask task = new FetchWeatherTask();
+
+        int corePoolSize = 60;
+        int maximumPoolSize = 80;
+        int keepAliveTime = 10;
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+        Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+        Log.i(TAG, "Refresh Action being called");
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pinCode);
+        else
+            task.execute(pinCode);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String pinCode= prefs.getString(getString(R.string.pref_location_key) ,getString(R.string.pref_location_default));
-
         if (id == R.id.action_refresh) {
-            FetchWeatherTask task = new FetchWeatherTask();
-
-            int corePoolSize = 60;
-            int maximumPoolSize = 80;
-            int keepAliveTime = 10;
-            BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
-            Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-            Log.i(TAG, "Refresh Action being called");
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pinCode);
-            else
-                task.execute(pinCode);
-
-
             Log.i(TAG, "Refresh Action executed");
             return true;
         }
@@ -105,7 +110,7 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weatherForecastList);
+        weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         final ListView listview = (ListView) rootView.findViewById(R.id.listview_forecast);
@@ -117,9 +122,9 @@ public class ForecastFragment extends Fragment {
                 Context context = getActivity().getApplicationContext();
                 String text = (String) listview.getAdapter().getItem(position);
 
-                Toast.makeText(context, "Following info: "+text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Following info: " + text, Toast.LENGTH_SHORT).show();
 
-                Intent intent= new Intent(context, DetailActivity.class).putExtra(Intent.EXTRA_TEXT,text);
+                Intent intent = new Intent(context, DetailActivity.class).putExtra(Intent.EXTRA_TEXT, text);
                 startActivity(intent);
 
 
