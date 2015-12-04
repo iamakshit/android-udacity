@@ -78,6 +78,8 @@ public class ForecastFragment extends Fragment {
     public void updateWeatherTask() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String pinCode = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        String units = prefs.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temp_default));
+
 
         FetchWeatherTask task = new FetchWeatherTask();
 
@@ -90,9 +92,9 @@ public class ForecastFragment extends Fragment {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pinCode);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pinCode,units);
         else
-            task.execute(pinCode);
+            task.execute(pinCode,units);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -261,8 +263,8 @@ public class ForecastFragment extends Fragment {
             final String DAYS_PARAM = "cnt";
             final String APPID_PARAM = "APPID";
 
+            String units=params[1];
             String format = "json";
-            String units = "metric";
             int num = 7;
             String[] data = new String[num];
             if (params.length == 0) {

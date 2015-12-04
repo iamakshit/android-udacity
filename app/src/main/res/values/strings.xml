@@ -6,8 +6,11 @@
     <string name="hello_world">Hello World</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_location_label">Location</string>
+    <string name="pref_temperature_label">Temperature</string>
+    <string name="pref_temperature_key">temperature</string>
     <string name="pref_location_key">location</string>
     <string name="pref_location_default">110052</string>
+    <string name="pref_temp_default">metric</string>
 
 
 </resources>
