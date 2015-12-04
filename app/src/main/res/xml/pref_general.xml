@@ -10,4 +10,13 @@
         android:singleLine="true"
         android:title="@string/pref_location_label" />
 
+    <ListPreference
+        android:inputType="text"
+        android:key="@string/pref_temperature_key"
+        android:title="@string/pref_temperature_label"
+        android:entries="@array/temp_display_name"
+        android:entryValues="@array/temp_display_values"
+        android:defaultValue="@string/pref_temp_default"
+        />
+
 </PreferenceScreen>
