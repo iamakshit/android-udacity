@@ -50,6 +50,7 @@ public class ForecastFragment extends Fragment {
     ArrayAdapter<String> weatherFroecastAdapter;
     public static final String OPEN_WEATHER_MAP_API_KEY = "f4a6312a0459542973769c10abf61c7c";
 
+
     public ForecastFragment() {
     }
 
@@ -73,6 +74,7 @@ public class ForecastFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
         inflater.inflate(R.menu.menu_settings, menu);
+
     }
 
     public void updateWeatherTask() {
