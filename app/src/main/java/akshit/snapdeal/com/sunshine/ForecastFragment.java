@@ -113,7 +113,8 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        //Note that list_item_forecast.xml is used to specify the behaviour of every item in the list
+        //fragment_main.xml is used to define the behaviour of the list
         weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -342,6 +343,7 @@ public class ForecastFragment extends Fragment {
 
             }
             return data;
+
         }
     }
 }

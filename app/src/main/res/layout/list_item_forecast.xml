@@ -4,9 +4,9 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:text="New Text"
-        android:gravity="center"
+        android:gravity="center_horizontal"
+        android:minHeight="?android:attr/listPreferredItemHeight"
         android:id="@+id/list_item_forecast_textview" />
 </LinearLayout>
