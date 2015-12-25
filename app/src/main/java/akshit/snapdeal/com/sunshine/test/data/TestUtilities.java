@@ -1,4 +1,4 @@
-package akshit.snapdeal.com.sunshine.data;
+package akshit.snapdeal.com.sunshine.test.data;
 
 /**
  * Created by akshit on 20/12/15.
@@ -17,6 +17,9 @@ import android.test.AndroidTestCase;
 
 import java.util.Map;
 import java.util.Set;
+
+import akshit.snapdeal.com.sunshine.data.WeatherContract;
+import akshit.snapdeal.com.sunshine.data.WeatherDbHelper;
 import akshit.snapdeal.com.sunshine.utils.PollingCheck;
 
 /*

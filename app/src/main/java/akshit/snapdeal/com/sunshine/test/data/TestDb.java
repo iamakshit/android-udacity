@@ -1,4 +1,4 @@
-package akshit.snapdeal.com.sunshine.data;
+package akshit.snapdeal.com.sunshine.test.data;
 
 /**
  * Created by akshit on 20/12/15.
@@ -9,9 +9,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
-import junit.framework.Test;
-
 import java.util.HashSet;
+
+import akshit.snapdeal.com.sunshine.data.WeatherContract;
+import akshit.snapdeal.com.sunshine.data.WeatherDbHelper;
 
 public class TestDb extends AndroidTestCase {
 
