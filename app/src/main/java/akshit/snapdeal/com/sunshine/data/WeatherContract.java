@@ -5,6 +5,7 @@ package akshit.snapdeal.com.sunshine.data;
  */
 
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
@@ -12,6 +13,12 @@ import android.text.format.Time;
  * Defines table and column names for the weather database.
  */
 public class WeatherContract {
+
+
+    public static final String CONTENT_AUTHORITY = "akshit.snapdeal.com.sunshine.data";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_WEATHER = "weather";
+    public static final String PATH_LOCATION = "location";
 
     // To make it easy to query for the exact date, we normalize all dates that go into
     // the database to the start of the the Julian day at UTC.
@@ -21,6 +28,10 @@ public class WeatherContract {
         time.set(startDate);
         int julianDay = Time.getJulianDay(startDate, time.gmtoff);
         return time.setJulianDay(julianDay);
+    }
+
+    public WeatherContract() {
+        super();
     }
 
     /*
@@ -46,6 +57,10 @@ public class WeatherContract {
 
     /* Inner class that defines the contents of the weather table */
     public static final class WeatherEntry implements BaseColumns {
+
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
 
         public static final String TABLE_NAME = "weather";
 
@@ -75,5 +90,11 @@ public class WeatherContract {
 
         // Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
         public static final String COLUMN_DEGREES = "degrees";
+
+        public static Uri buildWeatherLocation(String locationSetting)
+        {
+            return BASE_CONTENT_URI.buildUpon().appendPath(locationSetting).build();
+        }
+
     }
 }
