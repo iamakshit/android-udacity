@@ -1,4 +1,4 @@
-package akshit.snapdeal.com.sunshine.test.data;
+package akshit.snapdeal.com.sunshine.data;
 
 /**
  * Created by akshit on 20/12/15.
