@@ -83,7 +83,7 @@ public class ForecastFragment extends Fragment {
         String units = prefs.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temp_default));
 
 
-        FetchWeatherTask task = new FetchWeatherTask(weatherFroecastAdapter);
+        FetchWeatherTask task = new FetchWeatherTask(weatherFroecastAdapter, getActivity());
 
         int corePoolSize = 60;
         int maximumPoolSize = 80;
