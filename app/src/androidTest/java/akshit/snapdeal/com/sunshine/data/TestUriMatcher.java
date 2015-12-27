@@ -27,6 +27,11 @@ public class TestUriMatcher extends AndroidTestCase {
     private static final Uri TEST_WEATHER_DIR = WeatherContract.WeatherEntry.CONTENT_URI;
     private static final Uri TEST_WEATHER_WITH_LOCATION_DIR = WeatherContract.WeatherEntry.buildWeatherLocation(LOCATION_QUERY);
     private static final Uri TEST_WEATHER_WITH_LOCATION_AND_DATE_DIR = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(LOCATION_QUERY, TEST_DATE);
+
+    public TestUriMatcher() {
+        super();
+    }
+
     // content://com.example.android.sunshine.app/location"
     private static final Uri TEST_LOCATION_DIR = WeatherContract.LocationEntry.CONTENT_URI;
 
