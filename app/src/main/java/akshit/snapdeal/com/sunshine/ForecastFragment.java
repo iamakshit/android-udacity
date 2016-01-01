@@ -3,6 +3,7 @@ package akshit.snapdeal.com.sunshine;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -40,6 +41,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import akshit.snapdeal.com.sunshine.data.WeatherContract;
+import akshit.snapdeal.com.sunshine.utils.Utility;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -47,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 public class ForecastFragment extends Fragment {
 
     String TAG = "akshit.snapdeal.com.sunshine.ForecastFragment";
-    ArrayAdapter<String> weatherFroecastAdapter;
+    ForecastAdapter weatherFroecastAdapter;
     public static final String OPEN_WEATHER_MAP_API_KEY = "f4a6312a0459542973769c10abf61c7c";
 
 
@@ -83,7 +87,7 @@ public class ForecastFragment extends Fragment {
         String units = prefs.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temp_default));
 
 
-        FetchWeatherTask task = new FetchWeatherTask(weatherFroecastAdapter, getActivity());
+        FetchWeatherTask task = new FetchWeatherTask(getActivity());
 
         int corePoolSize = 60;
         int maximumPoolSize = 80;
@@ -113,15 +117,28 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+
         //Note that list_item_forecast.xml is used to specify the behaviour of every item in the list
         //fragment_main.xml is used to define the behaviour of the list
-        weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
+      //  weatherFroecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
+
+        weatherFroecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
+
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         final ListView listview = (ListView) rootView.findViewById(R.id.listview_forecast);
         listview.setAdapter(weatherFroecastAdapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Context context = getActivity().getApplicationContext();
@@ -134,7 +151,7 @@ public class ForecastFragment extends Fragment {
 
 
             }
-        });
+        }); */
         return rootView;
 
     }
